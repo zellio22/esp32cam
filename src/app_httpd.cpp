@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+//modifier
 #include "esp_http_server.h"
 #include "esp_timer.h"
 #include "esp_camera.h"
@@ -33,6 +35,12 @@
 #define FACE_COLOR_YELLOW (FACE_COLOR_RED | FACE_COLOR_GREEN)
 #define FACE_COLOR_CYAN   (FACE_COLOR_BLUE | FACE_COLOR_GREEN)
 #define FACE_COLOR_PURPLE (FACE_COLOR_BLUE | FACE_COLOR_RED)
+
+bool div1=0;
+bool div2=0;
+bool div3=0;
+int light_int=0;
+
 
 typedef struct {
         size_t size; //number of values used for filtering
@@ -511,6 +519,10 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     else if(!strcmp(variable, "special_effect")) res = s->set_special_effect(s, val);
     else if(!strcmp(variable, "wb_mode")) res = s->set_wb_mode(s, val);
     else if(!strcmp(variable, "ae_level")) res = s->set_ae_level(s, val);
+    else if(!strcmp(variable, "div_1")) {div1=val;res=0;}
+    else if(!strcmp(variable, "div_2")) {div2=val;res=0;}
+    else if(!strcmp(variable, "div_3")) {div3=val;res=0;}
+    else if(!strcmp(variable, "light")) {light_int=val;ledcWrite(15,val);res=0;}
     else if(!strcmp(variable, "face_detect")) {
         detection_enabled = val;
         if(!detection_enabled) {
@@ -570,7 +582,11 @@ static esp_err_t status_handler(httpd_req_t *req){
     p+=sprintf(p, "\"colorbar\":%u,", s->status.colorbar);
     p+=sprintf(p, "\"face_detect\":%u,", detection_enabled);
     p+=sprintf(p, "\"face_enroll\":%u,", is_enrolling);
-    p+=sprintf(p, "\"face_recognize\":%u", recognition_enabled);
+    p+=sprintf(p, "\"face_recognize\":%u,", recognition_enabled);
+	p+=sprintf(p, "\"Div_1\":%u,", div1);
+	p+=sprintf(p, "\"Div_2\":%u,", div2);
+	p+=sprintf(p, "\"Div_3\":%u,", div3);
+	p+=sprintf(p, "\"Light\":%u,", light_int);
     *p++ = '}';
     *p++ = 0;
     httpd_resp_set_type(req, "application/json");
