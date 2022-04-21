@@ -104,6 +104,8 @@ void setup() {
   Serial.print("Camera Ready! Use 'http://");
   Serial.print(WiFi.localIP());
   Serial.println("' to connect");
+  ledcSetup(0,200,8); //Channel 0, 200Hz, 8-bit resolution
+  ledcAttachPin(4,0);//Attach the PWM pin to the timer 0
 }
 
 void loop() {
