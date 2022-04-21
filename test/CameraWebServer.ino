@@ -21,7 +21,7 @@
 
 const char* ssid = "*********";
 const char* password = "*********";
-
+String hostname = "ESP32 Cam1";
 void startCameraServer();
 
 void setup() {
@@ -89,7 +89,7 @@ void setup() {
   s->set_vflip(s, 1);
   s->set_hmirror(s, 1);
 #endif
-
+  WiFi.setHostname(hostname.c_str());// ju 
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
